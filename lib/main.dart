@@ -6,4 +6,3 @@ import 'package:flutteruas/userlist.dart';
 void main() {
   runApp(UserList());
 }
-

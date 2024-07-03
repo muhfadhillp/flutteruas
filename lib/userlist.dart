@@ -39,7 +39,7 @@ class _UserListState extends State<UserList> {
                 padding: EdgeInsets.all(5),
                 child: TextField(
                   controller: Nama,
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                     labelText: "Nama",
                     border: OutlineInputBorder(),
@@ -61,7 +61,7 @@ class _UserListState extends State<UserList> {
                 padding: EdgeInsets.all(5),
                 child: TextField(
                   controller: Email,
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                     labelText: "Email",
                     border: OutlineInputBorder(),
@@ -85,7 +85,7 @@ class _UserListState extends State<UserList> {
                       } else {
                         UserData userData = daftarUser[indexDipilih];
                         userData.nama = Nama.text;
-                        userData.umur = int.parse(Umur.text);
+                        userData.umur = umur;
                         userData.email = Email.text;
 
                         btnSimpanText = "Simpan";
@@ -117,14 +117,20 @@ class _UserListState extends State<UserList> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      return Dismissible(
-                        key: ValueKey(daftarUser[index]),
-                        child: InkWell(
-                          child: UserItem(daftarUser[index]),
-                          onTap: () {
-                            Nama.text = daftarUser[index].nama;
-                            Umur.text = daftarUser[index].umur.toString();
-                            Email.text = daftarUser[index].email;
+                      final userData = daftarUser[index];
+                      int count = userData.umur;
+
+                      return Column(
+                        children: List.generate(
+                          count,
+                              (i) => Dismissible(
+                              key: ValueKey('$index-$i'),
+                              child: InkWell(
+                              child: UserItem(userData),
+                              onTap: () {
+                                Nama.text = userData.nama;
+                                Umur.text = userData.umur.toString();
+                                Email.text = userData.email;
 
                             btnSimpanText = btnUbahText;
                             btnSimpanWarna = btnUbahWarna;
@@ -193,7 +199,9 @@ class _UserListState extends State<UserList> {
                           } else {
                             return false;
                           }
-                        },
+                          },
+                          ),
+                        ),
                       );
                     },
                     separatorBuilder: (context, index) => Divider(),
